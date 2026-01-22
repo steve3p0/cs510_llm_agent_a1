@@ -1,0 +1,100 @@
+############################
+# Python
+############################
+__pycache__/
+*.py[cod]
+*$py.class
+
+############################
+# Virtual environments
+############################
+venv/
+.venv/
+env/
+ENV/
+
+############################
+# PyCharm / JetBrains
+############################
+.idea/
+*.iml
+
+############################
+# OS-specific
+############################
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+############################
+# Environment variables / secrets
+############################
+.env
+.env.*
+*.env
+
+############################
+# Data / datasets (IMPORTANT)
+############################
+data/
+datasets/
+*.jsonl
+*.parquet
+*.csv
+*.tsv
+*.pdf
+
+############################
+# Hugging Face / model caches
+############################
+.cache/
+hf_cache/
+huggingface/
+transformers_cache/
+
+############################
+# FAISS / embeddings / indexes
+############################
+*.faiss
+*.index
+*.npy
+*.npz
+
+############################
+# Logs / outputs
+############################
+logs/
+*.log
+outputs/
+results/
+
+############################
+# Notebooks / experiments
+############################
+.ipynb_checkpoints/
+*.ipynb
+
+############################
+# Build / distribution
+############################
+build/
+dist/
+*.egg-info/
+
+############################
+# Coverage / testing
+############################
+.coverage
+htmlcov/
+.pytest_cache/
+
+############################
+# Temporary / scratch
+############################
+scratch/
+tmp/
+temp/
