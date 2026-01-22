@@ -1,0 +1,20 @@
+# Core RAG + DSPy
+dspy-ai>=2.4.0
+
+# Hugging Face datasets (BioASQ)
+datasets>=2.16.0
+huggingface-hub>=0.20.0
+
+# Embeddings
+sentence-transformers>=2.2.2
+torch>=2.0.0
+
+# Vector store
+chromadb>=0.4.22
+
+# Utilities
+numpy>=1.24.0
+tqdm>=4.66.0
+
+# OpenAI (LM backend used in demo)
+openai>=1.12.0
