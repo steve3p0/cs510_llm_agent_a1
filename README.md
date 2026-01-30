@@ -1,6 +1,11 @@
 # CS510 LLM Agents – Assignment 1  
 **RAG + BioASQ Utilities with Unit Tests**
 
+This repository is part of a **group project for Assignment 1** in **CS 510: LLM Agents**, taught by **Dr. Suresh Singh** at Portland State University.  
+The full assignment description and requirements are available here:
+
+🔗 https://github.com/steve3p0/cs510_llm_agent_a1/blob/main/a1agents.pdf
+
 This project contains utility code and unit tests for working with a simplified
 Retrieval-Augmented Generation (RAG) pipeline using the BioASQ dataset.
 It focuses on **data loading, argument parsing, index-building helpers, and
@@ -129,7 +134,6 @@ This ensures:
 ## Notes
 
 - `pytest.ini` is intentionally **not used**; pytest default discovery is sufficient.
-- `pytest-cov` is intentionally omitted because coverage reporting is not required.
 - The project is structured to prioritize clarity and correctness over performance.
 
 ---
