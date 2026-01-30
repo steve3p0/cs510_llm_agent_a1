@@ -1,17 +1,14 @@
 # CS510 LLM Agents – Assignment 1  
-**RAG + BioASQ Utilities with Unit Tests**
+**Retrieval-Augmented Generation (RAG) with BioASQ**
 
-This repository is part of a **group project for Assignment 1** in **CS 510: LLM Agents**, taught by **Dr. Suresh Singh** at Portland State University.  
-The full assignment description and requirements are available here:
+This repository contains the solution for **Assignment 1** of **CS 510: LLM Agents** (Portland State University, Dr. Suresh Singh).
 
-🔗 https://github.com/steve3p0/cs510_llm_agent_a1/blob/main/a1agents.pdf
+The project implements a simplified **Retrieval-Augmented Generation (RAG)** pipeline over the **BioASQ** corpus using **ChromaDB**, with a clear separation between:
 
-This project contains utility code and unit tests for working with a simplified
-Retrieval-Augmented Generation (RAG) pipeline using the BioASQ dataset.
-It focuses on **data loading, argument parsing, index-building helpers, and
-ChromaDB-related logic**, with an emphasis on **correctness and testability**.
+- **Retrieval** (fully offline, deterministic)
+- **Generation** (optional, LLM-backed)
 
-All functionality is covered by fast, deterministic unit tests using `pytest`.
+The codebase emphasizes **correctness, transparency, and testability**, and includes both **unit tests** and **end-to-end integration tests**.
 
 ---
 
@@ -27,9 +24,13 @@ cs510_llm_agent_a1/
 ├── tests/
 │   ├── test_build_index.py
 │   ├── test_chroma_rm.py
-│   └── test_rag_bioasq.py
+│   ├── test_rag_bioasq.py
+│   └── integration/
+│       └── test_rag_bioasq_integration.py
+├── main.py
 ├── requirements.txt
 ├── requirements-dev.txt
+├── pytest.ini
 └── README.md
 ```
 
@@ -47,28 +48,91 @@ python -m venv .venv
 ### 2. Install dependencies
 
 Runtime dependencies:
+
 ```powershell
 pip install -r requirements.txt
 ```
 
 Development / testing dependencies:
+
 ```powershell
 pip install -r requirements-dev.txt
 ```
 
 ---
 
-## Running Unit Tests
+## Optional LLM Configuration (`.env.local`)
 
-### Command line (recommended baseline)
+LLM-based answer generation is **optional**.  
+Retrieval works without any API keys.
+
+If you want to enable generation using OpenAI:
+
+### Create a local environment file (not committed)
+
+Create a file named `.env.local` in the project root:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+⚠️ **Do not commit this file to GitHub.**  
+It is intentionally excluded via `.gitignore`.
+
+If no API key is present, the system will:
+- build / load the BioASQ index
+- retrieve relevant passages
+- display retrieved context
+- **skip generation gracefully** with a warning
+
+This behavior is intentional and covered by integration tests.
+
+---
+
+## Running the Application
+
+### Start the interactive RAG system
 
 From the project root:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -q
+python main.py
 ```
 
-Expected output:
+Expected startup output (abridged):
+
+```text
+BioASQ RAG ready. Type a question (or 'exit').
+Q>
+```
+
+You can then type questions interactively:
+
+```text
+Q> What is the meaning of life?
+```
+
+If no LLM is configured, retrieved passages will still be shown.
+
+Exit the program with:
+
+```text
+Q> exit
+```
+
+---
+
+## Running Unit Tests
+
+Unit tests are **fast, deterministic, and offline**.
+
+From the project root:
+
+```powershell
+pytest -q
+```
+
+Expected result:
 
 ```text
 11 passed in <time>s
@@ -76,70 +140,73 @@ Expected output:
 
 ---
 
-### PyCharm Run/Debug Configuration
+## Running Integration Tests
 
-To run all tests in PyCharm:
+Integration tests validate **end-to-end system behavior**, including:
 
-- **Run type:** Python tests → pytest  
-- **Interpreter:** Project virtual environment  
-- **Script path:**  
-  ```
-  C:\workspace_courses\cs510_llm_agent_a1
-  ```
-- **Working directory:**  
-  ```
-  C:\workspace_courses\cs510_llm_agent_a1
-  ```
+- persistent ChromaDB usage
+- interactive input/output
+- retrieval-only fallback when no LLM is configured
 
-> Note: On Windows, using an explicit absolute path is more reliable than
-> `<project_root>` for PyCharm’s pytest runner.
+Run integration tests only:
+
+```powershell
+pytest -q -m integration
+```
+
+Expected result:
+
+```text
+2 passed, <n> deselected
+```
 
 ---
 
 ## Testing Philosophy
 
-- Tests are **pure unit tests**
-- No network calls
-- No model loading
-- No large datasets loaded at import time
-- All external behavior is mocked or reduced to deterministic inputs
+- **No network calls**
+- **No API keys required**
+- **No large datasets downloaded during tests**
+- Retrieval and generation are tested as **separate concerns**
+
+Integration tests use:
+- a tiny, synthetic Chroma collection
+- real subprocess execution
+- stdin-driven interaction
 
 This ensures:
-- Fast execution (< 0.1s total)
-- Reliable grading
-- Clear failure modes
+- reproducibility
+- fast grading
+- clear failure modes
 
 ---
 
 ## What Is Tested
 
-### `build_index`
-- Argument parsing
-- Default and fallback behavior
-- Passage selection logic
+### Unit Tests
+- Argument parsing and defaults
+- Chroma retrieval logic
+- Dataset split handling
+- Error and edge-case behavior
 
-### `chroma_rm`
-- Empty collection behavior
-- Query handling
-- Returned structure (scores + metadata)
-
-### `rag_bioasq`
-- Dataset loading logic
-- Split selection (`passages`, `train`)
-- Error handling for invalid splits
-- Field extraction and normalization
+### Integration Tests
+- End-to-end retrieval pipeline
+- Interactive REPL behavior
+- Retrieval-only fallback (no LLM)
+- Graceful startup with empty or missing indices
 
 ---
 
 ## Notes
 
-- `pytest.ini` is intentionally **not used**; pytest default discovery is sufficient.
-- The project is structured to prioritize clarity and correctness over performance.
+- API keys are **never required** for testing or grading
+- Integration tests do **not** rely on `.env.local`
+- `pytest.ini` is included to register custom test markers
 
 ---
 
 ## Author
 
 **Steve Braich**  
-CS510 – LLM Agents  
+CS 510 – LLM Agents  
 Portland State University
