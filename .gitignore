@@ -17,7 +17,8 @@ ENV/
 # PyCharm / JetBrains
 ############################
 .idea/
-*.iml
+!.idea/runConfigurations/
+!.idea/runConfigurations/*.xml
 
 ############################
 # OS-specific
